@@ -1,0 +1,50 @@
+{
+  "approvedEgressFqdns": [
+    "management.azure.com",
+    "login.microsoftonline.com"
+  ],
+  "asOf": "2026-07-30T18:31:30+01:00",
+  "deployTopology": false,
+  "hubs": [
+    {
+      "addressPrefix": "10.10.0.0/23",
+      "firewall": {
+        "dnsProxy": true,
+        "intrusionDetectionMode": "Deny",
+        "threatIntelMode": "Deny",
+        "tier": "Premium",
+        "tlsInspection": true
+      },
+      "location": "westeurope",
+      "name": "hub-weu",
+      "routingIntent": {
+        "internetTraffic": true,
+        "privateTraffic": true
+      },
+      "spokePrefix": "10.10.16.0/24"
+    },
+    {
+      "addressPrefix": "10.20.0.0/23",
+      "firewall": {
+        "dnsProxy": true,
+        "intrusionDetectionMode": "Deny",
+        "threatIntelMode": "Deny",
+        "tier": "Premium",
+        "tlsInspection": true
+      },
+      "location": "northeurope",
+      "name": "hub-neu",
+      "routingIntent": {
+        "internetTraffic": true,
+        "privateTraffic": true
+      },
+      "spokePrefix": "10.20.16.0/24"
+    }
+  ],
+  "namePrefix": "ztvwan",
+  "schemaVersion": "1.0",
+  "tlsInspectionExceptions": [],
+  "virtualWan": {
+    "type": "Standard"
+  }
+}
