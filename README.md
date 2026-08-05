@@ -40,6 +40,14 @@ Stakeholders receive a decision package they can attach to a change record: requ
 
 The upper boundary names the principal services and technologies used by this repository. The lower boundary shows the implemented control flow: desired state is validated, provider action remains an explicit integration gate, and sanitized evidence is retained for review and deterministic replay.
 
+## Best complementary diagram
+
+**Recommended view: Secured virtual-WAN packet and routing topology.** A topology view is the strongest complement because it makes network and identity boundaries, enforcement hops, and the governed path physically legible.
+
+![Icon-based secured virtual-wan packet and routing topology for Zero Trust Virtual WAN Gateway](docs/operational-view.svg)
+
+The view follows **Enter branch or spoke → Select secured virtual hub → Inspect route intent → Reach approved destination**. Use it during design reviews, operational walkthroughs, and failure-mode discussions; use the logical architecture above when the question is which technologies integrate.
+
 ## Validate and render
 
 Python 3.11+ is required; no third-party Python packages are used.
