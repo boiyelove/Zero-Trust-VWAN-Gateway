@@ -12,30 +12,35 @@ isolated spokes, private DNS links, and centralized firewall diagnostics. The
 firewall policy has no broad east-west allow rule; approved HTTPS destinations
 are explicit and TLS-inspected.
 
-## Example synopsis
+## Problem statement
 
 A two-region Virtual WAN request is checked for private routing, secured hubs, Firewall Premium inspection, approved prefixes, and a pre-change route snapshot before producing deployable parameters.
 
-## Real-world scenario
+A production implementation can still fail even when every resource deploys successfully. The material risk is accidental reachability: a valid operational need creates a broader or longer-lived path than intended. The design therefore treats Virtual WAN, Azure Firewall, ExpressRoute, and the surrounding identity and evidence controls as one reviewable system rather than unrelated configuration tasks.
+
+## Example case study
+
+### Situation
 
 A multinational company is replacing inconsistent site-to-site VPN hubs with centrally governed transit. The gateway provides repeatable inspection and segmentation while documenting the routing-intent rollback boundary that teams often discover too late.
 
+### Response
+
+A multinational connects an acquired branch whose prefix overlaps an existing spoke. Preflight stops routing intent; after correction, private and internet traffic traverse Firewall Premium and the prior route snapshot remains available for rollback.
+
+The team first exercises the repository's synthetic approved and denied fixtures. An approved request must produce the same idempotent plan on replay; a stale, unscoped, public, or unapproved request must fail before an Azure adapter is allowed to run.
+
+### Expected outcome
+
+Stakeholders receive a decision package they can attach to a change record: requested scope, controls evaluated, the reason for approval or denial, and the explicit handoff to live integration. The example supports design review and incident rehearsal without pretending that a local test changed Azure.
+
 ## Architecture
 
-```mermaid
-flowchart LR
-  B[Branches / ExpressRoute] --> H1[Region A secured hub]
-  B --> H2[Region B secured hub]
-  S1[Isolated spoke A] --> H1
-  S2[Isolated spoke B] --> H2
-  H1 --> F1[Firewall Premium A]
-  H2 --> F2[Firewall Premium B]
-  F1 <--> F2
-  F1 --> E[Approved TLS-inspected egress]
-  F2 --> E
-  F1 --> M[Log Analytics]
-  F2 --> M
-```
+![Icon-based architecture for Zero-Trust-VWAN-Gateway](docs/architecture.svg)
+
+The upper boundary names the principal services and technologies used by this repository. The lower boundary shows the implemented control flow: desired state is validated, provider action remains an explicit integration gate, and sanitized evidence is retained for review and deterministic replay.
+
+Azure product icons come from [Microsoft's official Azure Architecture Icons](https://learn.microsoft.com/azure/architecture/icons/). Open-source marks are sourced from [Simple Icons](https://simpleicons.org/) when shown; each mark identifies its respective technology.
 
 ## Validate and render
 
