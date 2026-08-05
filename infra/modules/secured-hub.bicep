@@ -1,6 +1,7 @@
 param virtualWanId string
 param hub object
 param approvedEgressFqdns array
+@secure()
 param tlsInspectionCertificateSecretId string
 param logAnalyticsWorkspaceId string
 param privateDnsZoneId string
