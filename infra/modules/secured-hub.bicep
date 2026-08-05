@@ -1,3 +1,8 @@
+// Zero-Trust-VWAN-Gateway infrastructure template.
+// Resource behavior stays in this file; deployment-time values are supplied by ./secured-hub.bicepparam.
+
+// Deployment inputs: values are explicit, reviewable, and environment-specific.
+
 param virtualWanId string
 param hub object
 param approvedEgressFqdns array
@@ -6,6 +11,7 @@ param tlsInspectionCertificateSecretId string
 param logAnalyticsWorkspaceId string
 param privateDnsZoneId string
 
+// Resource firewallPolicy: declares Microsoft.Network/firewallPolicies@2024-05-01 and its security settings.
 resource firewallPolicy 'Microsoft.Network/firewallPolicies@2024-05-01' = {
   name: '${hub.name}-policy'
   location: hub.location
@@ -29,6 +35,7 @@ resource firewallPolicy 'Microsoft.Network/firewallPolicies@2024-05-01' = {
   }
 }
 
+// Resource baselineRules: declares Microsoft.Network/firewallPolicies/ruleCollectionGroups@2024-05-01 and its security settings.
 resource baselineRules 'Microsoft.Network/firewallPolicies/ruleCollectionGroups@2024-05-01' = {
   parent: firewallPolicy
   name: 'explicit-baseline'
@@ -91,6 +98,7 @@ resource baselineRules 'Microsoft.Network/firewallPolicies/ruleCollectionGroups@
   }
 }
 
+// Resource virtualHub: declares Microsoft.Network/virtualHubs@2024-05-01 and its security settings.
 resource virtualHub 'Microsoft.Network/virtualHubs@2024-05-01' = {
   name: hub.name
   location: hub.location
@@ -108,6 +116,7 @@ resource virtualHub 'Microsoft.Network/virtualHubs@2024-05-01' = {
   }
 }
 
+// Resource firewall: declares Microsoft.Network/azureFirewalls@2024-05-01 and its security settings.
 resource firewall 'Microsoft.Network/azureFirewalls@2024-05-01' = {
   name: '${hub.name}-firewall'
   location: hub.location
@@ -133,6 +142,7 @@ resource firewall 'Microsoft.Network/azureFirewalls@2024-05-01' = {
   ]
 }
 
+// Resource routingIntent: declares Microsoft.Network/virtualHubs/routingIntent@2024-05-01 and its security settings.
 resource routingIntent 'Microsoft.Network/virtualHubs/routingIntent@2024-05-01' = {
   parent: virtualHub
   name: 'default'
@@ -158,6 +168,7 @@ resource routingIntent 'Microsoft.Network/virtualHubs/routingIntent@2024-05-01' 
   }
 }
 
+// Resource spoke: declares Microsoft.Network/virtualNetworks@2024-05-01 and its security settings.
 resource spoke 'Microsoft.Network/virtualNetworks@2024-05-01' = {
   name: '${hub.name}-isolated-spoke'
   location: hub.location
@@ -183,6 +194,7 @@ resource spoke 'Microsoft.Network/virtualNetworks@2024-05-01' = {
   }
 }
 
+// Resource connection: declares Microsoft.Network/virtualHubs/hubVirtualNetworkConnections@2024-05-01 and its security settings.
 resource connection 'Microsoft.Network/virtualHubs/hubVirtualNetworkConnections@2024-05-01' = {
   parent: virtualHub
   name: '${hub.name}-spoke'
@@ -199,6 +211,7 @@ resource connection 'Microsoft.Network/virtualHubs/hubVirtualNetworkConnections@
   ]
 }
 
+// Resource dnsLink: declares Microsoft.Network/privateDnsZones/virtualNetworkLinks@2024-06-01 and its security settings.
 resource dnsLink 'Microsoft.Network/privateDnsZones/virtualNetworkLinks@2024-06-01' = {
   name: '${last(split(privateDnsZoneId, '/'))}/${hub.name}-spoke'
   location: 'global'
@@ -210,6 +223,7 @@ resource dnsLink 'Microsoft.Network/privateDnsZones/virtualNetworkLinks@2024-06-
   }
 }
 
+// Resource firewallDiagnostics: declares Microsoft.Insights/diagnosticSettings@2021-05-01-preview and its security settings.
 resource firewallDiagnostics 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = {
   scope: firewall
   name: 'central-logs'
@@ -230,4 +244,5 @@ resource firewallDiagnostics 'Microsoft.Insights/diagnosticSettings@2021-05-01-p
   }
 }
 
+// Deployment outputs: expose identifiers needed by operators and downstream automation.
 output hubId string = virtualHub.id
