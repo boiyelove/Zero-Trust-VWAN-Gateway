@@ -12,6 +12,19 @@ isolated spokes, private DNS links, and centralized firewall diagnostics. The
 firewall policy has no broad east-west allow rule; approved HTTPS destinations
 are explicit and TLS-inspected.
 
+## Project metadata
+
+The metadata below is derived from tracked source, manifests, and infrastructure
+files. It describes what this repository includes; live-service integration remains
+bounded by the documented deployment and validation limitations.
+
+| Category | Included |
+| --- | --- |
+| Platforms | Microsoft Azure; GitHub Actions |
+| Services and stack | Virtual WAN; Azure Firewall; ExpressRoute; Route Tables; Log Analytics |
+| Languages and formats | Python; Bicep; Bicep parameters; Bash; JSON; YAML |
+| Delivery and IaC | Bicep + `.bicepparam`; GitHub Actions CI; YAML configuration; Python validation/tests |
+
 ## Problem statement
 
 A two-region Virtual WAN request is checked for private routing, secured hubs, Firewall Premium inspection, approved prefixes, and a pre-change route snapshot before producing deployable parameters.
