@@ -41,7 +41,7 @@ resource logs 'Microsoft.OperationalInsights/workspaces@2023-09-01' = if (deploy
 }
 
 resource privateDns 'Microsoft.Network/privateDnsZones@2024-06-01' = if (deployTopology) {
-  name: 'privatelink.blob.core.windows.net'
+  name: 'privatelink.blob.${environment().suffixes.storage}'
   location: 'global'
 }
 
@@ -59,4 +59,6 @@ module securedHubs './modules/secured-hub.bicep' = [
   }
 ]
 
-output securedHubIds array = deployTopology ? [for item in securedHubs: item.outputs.hubId] : []
+output securedHubIds array = [
+  for (hub, index) in hubs: deployTopology ? securedHubs[index]!.outputs.hubId : ''
+]

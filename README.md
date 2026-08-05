@@ -12,6 +12,14 @@ isolated spokes, private DNS links, and centralized firewall diagnostics. The
 firewall policy has no broad east-west allow rule; approved HTTPS destinations
 are explicit and TLS-inspected.
 
+## Example synopsis
+
+A two-region Virtual WAN request is checked for private routing, secured hubs, Firewall Premium inspection, approved prefixes, and a pre-change route snapshot before producing deployable parameters.
+
+## Real-world scenario
+
+A multinational company is replacing inconsistent site-to-site VPN hubs with centrally governed transit. The gateway provides repeatable inspection and segmentation while documenting the routing-intent rollback boundary that teams often discover too late.
+
 ## Architecture
 
 ```mermaid
@@ -73,3 +81,16 @@ private-only Bastion Premium in the target region.
 
 See [architecture](docs/architecture.md), [threat model](docs/threat-model.md),
 [test matrix](docs/test-matrix.md), and [cost model](docs/cost-model.md).
+
+## Repository guide
+
+- [Architecture](docs/architecture.md)
+- [Threat model](docs/threat-model.md)
+- [Operations runbook](docs/runbook.md)
+- [Test matrix](docs/test-matrix.md)
+- [Cost model](docs/cost-model.md)
+- [Security policy](SECURITY.md)
+- [Contributing guide](CONTRIBUTING.md)
+- [Support policy](SUPPORT.md)
+- [Changelog](CHANGELOG.md)
+- [License](LICENSE)
